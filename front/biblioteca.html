@@ -10,6 +10,7 @@
         body{
     margin: 20px;
     font-family: Arial, Helvetica, sans-serif;
+    background-image: url("wazaaaa.jpg");
 }
 h2{
     text-align: center;
@@ -113,6 +114,7 @@ tr:nth-child(even){
           
             .then(() => carregarBooks())
         }
+
         function editar(idBooks) {
             let novoTitulo = prompt("Digite o nome do livro:")
             let novoAutor = prompt("Digite o nome do autor:")
@@ -145,21 +147,25 @@ tr:nth-child(even){
                 alert("o livro nao pode estar sem um valor de compra atribuido")
                 return
             }
-            fetch(`http://localhost:3000/livros/${idBooks}`,
-            {
+
+            console.log(novoTitulo, novoAutor, novoGenero, novoAnoPubli, novoIdioma, novoPreco);
+
+            fetch(`http://localhost:3000/livros/${idBooks}`, {
                 method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
-                    novoTitulo,
-                    novoAutor,
-                    novoAnoPubli,
-                    novoGenero,
-                    novoIdioma,
-                    novoPreco
-                    
+                    novoTitulo: novoTitulo,
+                    novoAutor: novoAutor,
+                    novoAnoPubli: novoAnoPubli,
+                    novoGenero: novoGenero,
+                    novoIdioma: novoIdioma,
+                    novoPreco: novoPreco
                 })
-            }
+            })
             .then(() => carregarBooks())
-            )
+            
         }
         function voltar() {
             window.location.href = "index.html"
@@ -169,3 +175,11 @@ tr:nth-child(even){
 
 </body>
 </html>
+
+
+
+
+
+
+<!-- PROGRAMAÇÃO É UMA MERDAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         >:( -->

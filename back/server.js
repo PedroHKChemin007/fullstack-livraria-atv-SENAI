@@ -105,6 +105,8 @@ app.delete("/livros/:id", (req, res) => {
 app.put("/livros/:id", async (req, res) => {
     let idLivro = req.params.id
 
+    console.log(req.body);
+
     let titulo = req.body.novoTitulo
     let autor = req.body.novoAutor
     let anopubli = req.body.novoAnoPubli
