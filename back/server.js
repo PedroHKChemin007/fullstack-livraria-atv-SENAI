@@ -2,7 +2,6 @@
 const express = require("express")
 const sqlite3 = require("sqlite3").verbose()
 const cors = require("cors")
-const bcrypt = require("bcrypt")
 
 // Configurar servidor
 const app = express()
@@ -19,7 +18,7 @@ db.run(`CREATE TABLE IF NOT EXISTS livros (
     titulo TEXT,
     autor TEXT,
     anopubli TEXT,
-    genero TEXT,0
+    genero TEXT,
     idioma TEXT,
     preco REAL
     )
@@ -106,12 +105,12 @@ app.delete("/livros/:id", (req, res) => {
 app.put("/livros/:id", async (req, res) => {
     let idLivro = req.params.id
 
-    let titulo = req.body.titulo
-    let autor = req.body.autor
-    let anopubli = req.body.anopubli
-    let genero = req.body.genero
-    let idioma = req.body.idioma
-    let preco = req.body.preco
+    let titulo = req.body.novoTitulo
+    let autor = req.body.novoAutor
+    let anopubli = req.body.novoAnoPubli
+    let genero = req.body.novoGenero
+    let idioma = req.body.novoIdioma
+    let preco = req.body.novoPreco
 
     db.run(`UPDATE livros SET titulo = ?, autor = ?, anopubli = ?, genero = ?, idioma = ?, preco = ?
         WHERE id = ?`, [titulo, autor, anopubli, genero, idioma, preco, idLivro],

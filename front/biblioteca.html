@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>usuários</title>
+    <link rel="stylesheet">
+    <style>
+        body{
+    margin: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+h2{
+    text-align: center;
+}
+table{
+    width: 100%;
+    border-collapse: collapse ;
+    margin-top: 20px;
+}
+
+th, td{
+    border: solid 2px #000000;
+}
+
+th {
+    background-color:#9f84ff;
+    color: rgb(255, 255, 255);
+}
+
+tr:nth-child(even){
+    background-color:rgb(219, 219, 219);
+
+}
+.btn-editar{
+    background: rgb(255, 164, 44);
+    width: auto;
+    color: white;
+    padding: 5px 10px;
+}
+
+.btn-excluir{
+    background: rgb(255, 58, 58);
+    width: auto;
+    color: white;
+    padding: 5px 10px;
+}
+    </style>
+</head>
+<body>
+    <button class="btn-voltar" onclick="voltar()">voltar para cadastro</button>
+    <!-- AGORA VAMOS CRIAR UMA TABELA -->
+    <h2>lista de livros</h2>
+    <!-- Essa é a estrutura para criarmos uma tabela -->
+    <table>
+        <!--Vai dizer tudo o que tem ali dentro vai ser um cabeçalho-->
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Ano de Publicação</th>
+                <th>Gênero</th>
+                <th>Idioma</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody id="tabela">
+            <!-- Gerando tabela dinamica -->
+        </tbody>
+    </table>
+
+    <script>
+        // busca os dados dos usuarios no server
+        function carregarBooks(){
+
+            fetch('http://localhost:3000/livros')
+            .then(res => res.json())
+            .then(data =>{
+                const tbody = document.getElementById('tabela')
+                //limpar os dados da tabela para não bugar
+                tbody.innerHTML = " "
+                data.forEach(book => {
+                    const tr = document.createElement('tr')
+                    //HTML interno vai receber informaçoes
+                    tr.innerHTML = `
+                    <td>${book.id}</td>
+                    <td>${book.titulo}</td>
+                    <td>${book.autor}</td>
+                    <td>${book.anopubli}</td>
+                    <td>${book.genero}</td>
+                    <td>${book.idioma}</td>
+                    <td>${book.preco}</td>
+                    <td>
+                        <button class="btn-editar" onclick="editar (${book.id})">Editar</button>
+                        <button class="btn-excluir" onclick="excluir (${book.id})">Excluir</button>
+                    </td>
+                    `
+                    //Anexar uma outra linha
+                    tbody.appendChild(tr)
+
+                });
+            })
+        }
+       
+        function excluir(idItem) {
+            fetch(`http://localhost:3000/livros/${idItem}`,
+            {
+            
+                'method' : 'DELETE'
+            })
+          
+            .then(() => carregarBooks())
+        }
+        function editar(idBooks) {
+            let novoTitulo = prompt("Digite o nome do livro:")
+            let novoAutor = prompt("Digite o nome do autor:")
+            let novoAnoPubli = prompt("Digite a data de publicação:")
+            let novoGenero = prompt("Digite o genero da obra:")
+            let novoIdioma = prompt("Digite o idioma:")
+            let novoPreco = prompt("Digite o novo valor:")
+
+            if (novoTitulo.length < 1) {
+                alert("O livro nao pode estar sem titulo")
+                return
+            }
+            if (novoAutor.length < 1) {
+                alert("o livro nao pode estar sem um autor registrado")
+                return
+            }
+            if (novoAnoPubli.length < 1) {
+                alert("o livro nao pode estar sem uma data de publicação registrada")
+                return
+            }
+            if (novoGenero.length < 1) {
+                alert("o livro nao pode estar sem um gener textual registrado")
+                return
+            }
+            if (novoIdioma.length < 1) {
+                alert("o livro nao pode estar sem um idioma registrado")
+                return
+            }
+            if (novoPreco.length < 1) {
+                alert("o livro nao pode estar sem um valor de compra atribuido")
+                return
+            }
+            fetch(`http://localhost:3000/livros/${idBooks}`,
+            {
+                method: 'PUT',
+                body: JSON.stringify({
+                    novoTitulo,
+                    novoAutor,
+                    novoAnoPubli,
+                    novoGenero,
+                    novoIdioma,
+                    novoPreco
+                    
+                })
+            }
+            .then(() => carregarBooks())
+            )
+        }
+        function voltar() {
+            window.location.href = "index.html"
+        }
+        window.onload = carregarBooks
+    </script>
+
+</body>
+</html>
